@@ -1,6 +1,7 @@
 const express = require('express')
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const cors = require('cors');
+const ObjectId = require("mongodb").ObjectId;
 require('dotenv').config()
 
 const app = express ();
@@ -19,6 +20,8 @@ async function run() {
       const database = client.db('car_sales');
       const servicesCollection = database.collection('services');
       const usersCollection = database.collection('users');
+      const reviewCollection = database.collection('review');
+      const ordersCollection = database.collection('orders');
 
     //GET API
     app.get('/services', async(req, res)=>{
@@ -63,6 +66,30 @@ async function run() {
         const updateDoc = { $set: { role: 'admin' }};
         const result = await usersCollection.updateOne(filter, updateDoc);
         res.json(result);
+      })
+
+      //adds Review
+      app.post('/addSReview', async(req, res)=>{
+        const result = await reviewCollection.insertOne(req.body);
+        res.send(result);
+      })
+
+      //booking
+      app.get('/singleProduct/:id', async(req, res)=>{
+        console.log(req.params.id)
+        const result = await servicesCollection.find({_id: ObjectId(req.params.id)}).toArray();
+        res.send(result[0])
+      })
+      //insert orders
+      app.post('/addOrders', async (req, res)=>{
+        const result = await ordersCollection.insertOne(req.body);
+        res.send(result);
+      })
+      //my order
+      app.get('/myOrder/:email', async (req, res) =>{
+        console.log(req.params.email);
+        const result = await ordersCollection.find({email: req.params.email}).toArray();
+        res.send(result)
       })
     } finally {
     //   await client.close();
