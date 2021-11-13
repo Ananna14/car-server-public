@@ -94,6 +94,17 @@ async function run() {
         res.send(result)
       })
      
+      //delete order
+      app.delete('/deleteOrder/:id', async(req, res)=>{
+        const result = await ordersCollection.deleteOne({_id: ObjectId(req.params.id)})
+        // console.log(result)
+        res.send(result)
+      })
+      //allOrders
+      app.get('/allOrders', async(req, res)=>{
+        const result = await ordersCollection.find({}).toArray();
+        res.send(result)
+      })
 
     } finally {
     //   await client.close();
