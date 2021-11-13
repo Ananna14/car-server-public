@@ -22,6 +22,7 @@ async function run() {
       const usersCollection = database.collection('users');
       const reviewCollection = database.collection('review');
       const ordersCollection = database.collection('orders');
+      // const bookingsCollection = database.collection('bookings');
 
     //GET API
     app.get('/services', async(req, res)=>{
@@ -54,7 +55,7 @@ async function run() {
       app.post('/users', async(req, res)=>{
           const user = req.body;
           const result = await usersCollection.insertOne(user);
-          console.log(result)
+          // console.log(result)
           res.json(result);
 
       });
@@ -89,8 +90,11 @@ async function run() {
       app.get('/myOrder/:email', async (req, res) =>{
         console.log(req.params.email);
         const result = await ordersCollection.find({email: req.params.email}).toArray();
+      // console.log(result)
         res.send(result)
       })
+     
+
     } finally {
     //   await client.close();
     }
