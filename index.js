@@ -4,7 +4,7 @@ const cors = require('cors');
 const ObjectId = require("mongodb").ObjectId;
 require('dotenv').config()
 
-const app = express ();
+const app = express();
 const port =process.env.PORT || 5000;
 
 app.use(cors())
@@ -75,6 +75,12 @@ async function run() {
         res.send(result);
       })
 
+      // review get
+      app.get('/review', async(req, res)=>{
+    const cursor = reviewCollection.find({})
+    const result = await cursor.toArray()
+    res.send(result);
+      })
       //booking
       app.get('/singleProduct/:id', async(req, res)=>{
         console.log(req.params.id)
